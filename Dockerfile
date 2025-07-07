@@ -5,10 +5,10 @@ FROM jupyter/scipy-notebook:29f53f8b9927
 
 MAINTAINER Jon Krohn <jon@jonkrohn.com>
 
+COPY --chown=${NB_UID}:${NB_GID} requirements.txt /tmp/
+
 USER $NB_USER
 
-# Install TensorFlow: 
-RUN pip install tensorflow==2.2.0rc3
-
-# Install PyTorch:
-RUN pip install torch==1.4.0
+# Install dependencies from requirements.txt
+# This combines layers and uses caching more effectively.
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
